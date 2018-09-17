@@ -1,0 +1,17 @@
+- hosts: all
+  become: true
+  tasks:
+  - name: Patch Splunk
+    # Copy the patch to the server
+    copy:
+      src: ./splunkforwarder-6.6.3-e21ee54bc796-Linux-x86_64.tgz
+      dest: ~/splunkforwarder-6.6.3-e21ee54bc796-Linux-x86_64.tgz
+    # Run the script to untar the package and run the patch
+    script: ./splunk_patch.sh
+    # Delete the patch file
+    file:
+      path: "{{ item }}"
+      state: absent
+    with_items:
+      - "~/splunkforwarder-6.6.3-e21ee54bc796-Linux-x86_64.tgz"
+      - "~/splunkforwarder-6.6.3-e21ee54bc796-Linux-x86_64"
